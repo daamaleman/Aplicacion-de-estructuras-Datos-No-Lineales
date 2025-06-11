@@ -77,20 +77,52 @@ def crear_grafo():
     
     return grafo
 
-# Programa principal
-print("=== Algoritmo de Dijkstra para encontrar el camino más corto ===")
-grafo = crear_grafo()
+def mostrar_menu():
+    print("\n=== Menú Principal ===")
+    print("1. Crear nuevo grafo")
+    print("2. Buscar camino más corto")
+    print("3. Salir")
+    return input("Seleccione una opción (1-3): ")
 
-print("\n=== Buscar camino más corto ===")
-inicio = input("Ingrese el nodo de inicio: ").upper()
-fin = input("Ingrese el nodo de destino: ").upper()
+def buscar_camino(grafo):
+    print("\n=== Buscar camino más corto ===")
+    inicio = input("Ingrese el nodo de inicio: ").upper()
+    fin = input("Ingrese el nodo de destino: ").upper()
 
-if inicio not in grafo or fin not in grafo:
-    print("Error: Uno o ambos nodos no existen en el grafo")
-else:
+    if inicio not in grafo or fin not in grafo:
+        print("Error: Uno o ambos nodos no existen en el grafo")
+        return
+    
     path, cost = dijkstra(grafo, inicio, fin)
     if path:
         print(f"\nCamino más corto de {inicio} a {fin}: {' -> '.join(path)}")
         print(f"Costo total: {cost}")
     else:
         print(f"\nNo se encontró un camino de {inicio} a {fin}")
+
+def main():
+    grafo = None
+    
+    while True:
+        opcion = mostrar_menu()
+        
+        if opcion == "1":
+            grafo = crear_grafo()
+            print("\nGrafo creado exitosamente!")
+            
+        elif opcion == "2":
+            if grafo is None:
+                print("\nPrimero debe crear un grafo (opción 1)")
+                continue
+            buscar_camino(grafo)
+            
+        elif opcion == "3":
+            print("\n¡Gracias por usar el programa!")
+            break
+            
+        else:
+            print("\nOpción no válida. Por favor seleccione 1, 2 o 3.")
+
+if __name__ == "__main__":
+    print("=== Algoritmo de Dijkstra para encontrar el camino más corto ===")
+    main()

@@ -60,28 +60,31 @@ def mostrar_menu():
     print("3. Salir")
     return input("Seleccione una opción (1-3): ")
 
-# Programa principal
-while True:
-    opcion = mostrar_menu()
-    
-    if opcion == "1":
-        numeros = solicitar_numeros()
-        if numeros:
-            print(f"\nNúmeros ingresados: {numeros}")
-    elif opcion == "2":
-        if 'numeros' not in locals() or not numeros:
-            print("\nPrimero debe ingresar números (opción 1)")
-            continue
-            
-        bst = BST()
-        for num in numeros:
-            bst.insert(num)
-            
-        numeros_ordenados = bst.inorder()
-        print(f"\nLista original: {numeros}")
-        print(f"Lista ordenada: {numeros_ordenados}")
-    elif opcion == "3":
-        print("\n¡Gracias por usar el programa!")
-        break
-    else:
-        print("\nOpción no válida. Por favor seleccione 1, 2 o 3.")
+def main():
+    while True:
+        opcion = mostrar_menu()
+        
+        if opcion == "1":
+            numeros = solicitar_numeros()
+            if numeros:
+                print(f"\nNúmeros ingresados: {numeros}")
+        elif opcion == "2":
+            if 'numeros' not in locals() or not numeros:
+                print("\nPrimero debe ingresar números (opción 1)")
+                continue
+                
+            bst = BST()
+            for num in numeros:
+                bst.insert(num)
+                
+            numeros_ordenados = bst.inorder()
+            print(f"\nLista original: {numeros}")
+            print(f"Lista ordenada: {numeros_ordenados}")
+        elif opcion == "3":
+            print("\n¡Gracias por usar el programa!")
+            break
+        else:
+            print("\nOpción no válida. Por favor seleccione 1, 2 o 3.")
+
+if __name__ == "__main__":
+    main()
