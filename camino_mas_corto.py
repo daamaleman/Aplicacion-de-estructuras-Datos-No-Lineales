@@ -41,10 +41,10 @@ def dijkstra(graph, start, end):
 # Ejemplo de uso del algoritmo de Dijkstra
 graph = {
     'A': {'B': 4, 'C': 2},
-    'B': {'A': 4, 'C': 1, 'D': 5},
+    'B': {'A': 4, 'C': 1, 'd': 5},
     'C': {'A': 2, 'B': 1, 'D': 8, 'E': 10},
-    'D': {'B': 5, 'C': 8, 'E': 2},
-    'E': {'C': 10, 'D': 2}
+    'D': {'B': 2, 'C': 8, 'E': 2},
+    'E': {'C': 3, 'D': 2}
 }
 
 path, cost = dijkstra(graph, 'A', 'E')
