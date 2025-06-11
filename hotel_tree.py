@@ -1,21 +1,22 @@
 class RoomNode:
     def __init__(self, room_number, room_type):
-        self.room_number = room_number
-        self.room_type = room_type
+        self.room_number = room_number  # Clave para ordenar el árbol
+        self.room_type = room_type      # Tipo de habitación
         self.left = None
         self.right = None
 
 class HotelTree:
     def __init__(self):
-        self.root = None
+        self.root = None  # Árbol inicialmente vacío
     
     def insert_room(self, room_number, room_type):
         if not self.root:
-            self.root = RoomNode(room_number, room_type)
+            self.root = RoomNode(room_number, room_type)  # Raíz si está vacío
         else:
             self._insert_recursive(self.root, room_number, room_type)
     
     def _insert_recursive(self, node, room_number, room_type):
+        # Inserta en subárbol izquierdo (menor) o derecho (mayor/igual) según room_number
         if room_number < node.room_number:
             if node.left is None:
                 node.left = RoomNode(room_number, room_type)
@@ -31,14 +32,13 @@ class HotelTree:
         return self._search_recursive(self.root, room_number)
     
     def _search_recursive(self, node, room_number):
+        # Retorna nodo si se encuentra o None si no existe
         if node is None or node.room_number == room_number:
             return node
-        if room_number < node.room_number:
-            return self._search_recursive(node.left, room_number)
-        return self._search_recursive(node.right, room_number)
+        return self._search_recursive(node.left if room_number < node.room_number else node.right, room_number)
     
     def list_rooms_inorder(self):
-        self._inorder_recursive(self.root)
+        self._inorder_recursive(self.root)  # Lista habitaciones en orden ascendente
         print()
     
     def _inorder_recursive(self, node):
@@ -47,38 +47,46 @@ class HotelTree:
             print(f"Habitación {node.room_number}: {node.room_type}", end=" | ")
             self._inorder_recursive(node.right)
 
-# Ejemplo de uso
 if __name__ == "__main__":
     hotel = HotelTree()
     
-    # Insertar habitaciones
-    rooms = [
-        (101, "Simple"),
-        (205, "Doble"),
-        (103, "Suite"),
-        (204, "Simple"),
-        (102, "Doble"),
-        (301, "Suite")
-    ]
+    # Solicita cantidad de habitaciones a registrar
+    try:
+        num_rooms = int(input("¿Cuántas habitaciones desea registrar? "))  # Entrada validada
+        print(f"Ingrese los datos para {num_rooms} habitaciones:")
+        
+        # Pide datos de cada habitación con validación
+        for i in range(num_rooms):
+            while True:
+                try:
+                    room_number = int(input(f"Número de habitación {i+1}: "))  # Número positivo
+                    if room_number <= 0:
+                        print("El número de habitación debe ser positivo.")
+                        continue
+                    room_type = input(f"Tipo de habitación {i+1} (Simple/Doble/Suite): ").capitalize()
+                    if room_type not in ["Simple", "Doble", "Suite"]:  # Restringe tipos válidos
+                        print("Tipo inválido. Use Simple, Doble o Suite.")
+                        continue
+                    hotel.insert_room(room_number, room_type)  # Inserta en el BST
+                    break
+                except ValueError:
+                    print("Entrada inválida. Ingrese un número válido para la habitación.")
+        
+        # Muestra habitaciones ordenadas
+        print("\nLista de habitaciones (inorden):")
+        hotel.list_rooms_inorder()
+        
+        # Búsqueda interactiva hasta que el usuario decida salir
+        while True:
+            try:
+                search_input = input("\nIngrese número de habitación a buscar (o 'salir' para terminar): ")
+                if search_input.lower() == "salir":  # Condición de salida
+                    break
+                room_number = int(search_input)
+                room = hotel.search_room(room_number)
+                print(f"Habitación encontrada: {room.room_number} ({room.room_type})" if room else f"Habitación {room_number} no encontrada")
+            except ValueError:
+                print("Entrada inválida. Ingrese un número o 'salir'.")
     
-    for room_number, room_type in rooms:
-        hotel.insert_room(room_number, room_type)
-    
-    print("Lista de habitaciones (inorden):")
-    hotel.list_rooms_inorder()  # Salida: Habitación 101: Simple | Habitación 102: Doble | Habitación 103: Suite | Habitación 204: Simple | Habitación 205: Doble | Habitación 301: Suite |
-    
-    # Buscar una habitación
-    room_number = 103
-    room = hotel.search_room(room_number)
-    if room:
-        print(f"\nHabitación encontrada: {room.room_number} ({room.room_type})")
-    else:
-        print(f"\nHabitación {room_number} no encontrada")
-    
-    # Buscar una habitación que no existe
-    room_number = 999
-    room = hotel.search_room(room_number)
-    if room:
-        print(f"Habitación encontrada: {room.room_number} ({room.room_type})")
-    else:
-        print(f"Habitación {room_number} no encontrada")
+    except ValueError:
+        print("Entrada inválida. Debe ingresar un número válido de habitaciones.")
