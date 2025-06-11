@@ -40,12 +40,48 @@ class BST:
             result.append(node.value)
             self._inorder_recursive(node.right, result)
 
-# Ejemplo de uso del BST para ordenar una lista
-numbers = [5, 2, 8, 1, 9, 3]
-bst = BST()
-for num in numbers:
-    bst.insert(num)
+def solicitar_numeros():
+    numeros = []
+    print("\n=== Ingreso de Números ===")
+    while True:
+        try:
+            num = input("Ingrese un número (o 'fin' para terminar): ")
+            if num.lower() == 'fin':
+                break
+            numeros.append(int(num))
+        except ValueError:
+            print("Error: Por favor ingrese un número válido")
+    return numeros
 
-sorted_numbers = bst.inorder()
-print(f"Lista original: {numbers}")
-print(f"Lista ordenada: {sorted_numbers}")
+def mostrar_menu():
+    print("\n=== Menú de Ordenamiento ===")
+    print("1. Ingresar nuevos números")
+    print("2. Ordenar números")
+    print("3. Salir")
+    return input("Seleccione una opción (1-3): ")
+
+# Programa principal
+while True:
+    opcion = mostrar_menu()
+    
+    if opcion == "1":
+        numeros = solicitar_numeros()
+        if numeros:
+            print(f"\nNúmeros ingresados: {numeros}")
+    elif opcion == "2":
+        if 'numeros' not in locals() or not numeros:
+            print("\nPrimero debe ingresar números (opción 1)")
+            continue
+            
+        bst = BST()
+        for num in numeros:
+            bst.insert(num)
+            
+        numeros_ordenados = bst.inorder()
+        print(f"\nLista original: {numeros}")
+        print(f"Lista ordenada: {numeros_ordenados}")
+    elif opcion == "3":
+        print("\n¡Gracias por usar el programa!")
+        break
+    else:
+        print("\nOpción no válida. Por favor seleccione 1, 2 o 3.")
