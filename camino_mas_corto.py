@@ -38,15 +38,59 @@ def dijkstra(graph, start, end):
     
     return None, float('infinity')  # No se encontró camino
 
-# Ejemplo de uso del algoritmo de Dijkstra
-graph = {
-    'A': {'B': 4, 'C': 2},
-    'B': {'A': 4, 'C': 1, 'd': 5},
-    'C': {'A': 2, 'B': 1, 'D': 8, 'E': 10},
-    'D': {'B': 2, 'C': 8, 'E': 2},
-    'E': {'C': 3, 'D': 2}
-}
+def crear_grafo():
+    grafo = {}
+    print("\n=== Creación del Grafo ===")
+    num_nodos = int(input("Ingrese el número de nodos: "))
+    
+    # Crear nodos
+    for i in range(num_nodos):
+        nodo = input(f"Ingrese el nombre del nodo {i+1}: ").upper()
+        grafo[nodo] = {}
+    
+    # Crear conexiones
+    print("\nAhora ingrese las conexiones entre nodos:")
+    while True:
+        print("\nOpciones:")
+        print("1. Agregar conexión")
+        print("2. Finalizar")
+        opcion = input("Seleccione una opción (1-2): ")
+        
+        if opcion == "2":
+            break
+        elif opcion == "1":
+            origen = input("Ingrese el nodo de origen: ").upper()
+            destino = input("Ingrese el nodo de destino: ").upper()
+            
+            if origen not in grafo or destino not in grafo:
+                print("Error: Uno o ambos nodos no existen en el grafo")
+                continue
+                
+            peso = float(input("Ingrese el peso de la conexión: "))
+            
+            # Agregar conexión bidireccional
+            grafo[origen][destino] = peso
+            grafo[destino][origen] = peso
+            print(f"Conexión agregada: {origen} <-> {destino} con peso {peso}")
+        else:
+            print("Opción no válida")
+    
+    return grafo
 
-path, cost = dijkstra(graph, 'A', 'E')
-print(f"Camino más corto de A a E: {path}")
-print(f"Costo total: {cost}")
+# Programa principal
+print("=== Algoritmo de Dijkstra para encontrar el camino más corto ===")
+grafo = crear_grafo()
+
+print("\n=== Buscar camino más corto ===")
+inicio = input("Ingrese el nodo de inicio: ").upper()
+fin = input("Ingrese el nodo de destino: ").upper()
+
+if inicio not in grafo or fin not in grafo:
+    print("Error: Uno o ambos nodos no existen en el grafo")
+else:
+    path, cost = dijkstra(grafo, inicio, fin)
+    if path:
+        print(f"\nCamino más corto de {inicio} a {fin}: {' -> '.join(path)}")
+        print(f"Costo total: {cost}")
+    else:
+        print(f"\nNo se encontró un camino de {inicio} a {fin}")
