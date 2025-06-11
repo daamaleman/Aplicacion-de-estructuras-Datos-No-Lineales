@@ -1,4 +1,4 @@
-# Ejemplo 2: Ordenamiento usando un Árbol Binario de Búsqueda (BST)
+# Example 2: Sorting using a Binary Search Tree (BST)
 class Node:
     def __init__(self, value):
         self.value = value
@@ -9,7 +9,7 @@ class BST:
     def __init__(self):
         self.root = None
     
-    # Insertar un valor en el árbol
+    # Insert a value into the tree
     def insert(self, value):
         if not self.root:
             self.root = Node(value)
@@ -28,7 +28,7 @@ class BST:
             else:
                 self._insert_recursive(node.right, value)
     
-    # Recorrido en orden (in-order) para obtener los valores ordenados
+    # In-order traversal to get sorted values
     def inorder(self):
         result = []
         self._inorder_recursive(self.root, result)
@@ -40,20 +40,20 @@ class BST:
             result.append(node.value)
             self._inorder_recursive(node.right, result)
 
-def solicitar_numeros():
-    numeros = []
+def request_numbers():
+    numbers = []
     print("\n=== Ingreso de Números ===")
     while True:
         try:
             num = input("Ingrese un número (o 'fin' para terminar): ")
             if num.lower() == 'fin':
                 break
-            numeros.append(int(num))
+            numbers.append(int(num))
         except ValueError:
             print("Error: Por favor ingrese un número válido")
-    return numeros
+    return numbers
 
-def mostrar_menu():
+def show_menu():
     print("\n=== Menú de Ordenamiento ===")
     print("1. Ingresar nuevos números")
     print("2. Ordenar números")
@@ -62,25 +62,25 @@ def mostrar_menu():
 
 def main():
     while True:
-        opcion = mostrar_menu()
+        option = show_menu()
         
-        if opcion == "1":
-            numeros = solicitar_numeros()
-            if numeros:
-                print(f"\nNúmeros ingresados: {numeros}")
-        elif opcion == "2":
-            if 'numeros' not in locals() or not numeros:
+        if option == "1":
+            numbers = request_numbers()
+            if numbers:
+                print(f"\nNúmeros ingresados: {numbers}")
+        elif option == "2":
+            if 'numbers' not in locals() or not numbers:
                 print("\nPrimero debe ingresar números (opción 1)")
                 continue
                 
             bst = BST()
-            for num in numeros:
+            for num in numbers:
                 bst.insert(num)
                 
-            numeros_ordenados = bst.inorder()
-            print(f"\nLista original: {numeros}")
-            print(f"Lista ordenada: {numeros_ordenados}")
-        elif opcion == "3":
+            sorted_numbers = bst.inorder()
+            print(f"\nLista original: {numbers}")
+            print(f"Lista ordenada: {sorted_numbers}")
+        elif option == "3":
             print("\n¡Gracias por usar el programa!")
             break
         else:

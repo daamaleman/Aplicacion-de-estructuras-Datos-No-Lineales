@@ -1,20 +1,20 @@
-# Ejemplo 1: Algoritmo de Dijkstra para encontrar el camino más corto en un grafo
+# Example 1: Dijkstra's Algorithm for finding the shortest path in a graph
 import heapq
 from collections import defaultdict
 
 def dijkstra(graph, start, end):
-    # Cola de prioridad para explorar nodos (distancia, nodo)
+    # Priority queue to explore nodes (distance, node)
     queue = [(0, start)]
-    # Diccionario para almacenar distancias mínimas
+    # Dictionary to store minimum distances
     distances = {node: float('infinity') for node in graph}
     distances[start] = 0
-    # Diccionario para almacenar el camino
+    # Dictionary to store the path
     previous = {node: None for node in graph}
     
     while queue:
         current_distance, current_node = heapq.heappop(queue)
         
-        # Si llegamos al nodo destino, construimos el camino
+        # If we reached the destination node, build the path
         if current_node == end:
             path = []
             while current_node is not None:
@@ -22,101 +22,101 @@ def dijkstra(graph, start, end):
                 current_node = previous[current_node]
             return path[::-1], current_distance
         
-        # Si encontramos una distancia mayor, ignoramos
+        # If we found a greater distance, ignore
         if current_distance > distances[current_node]:
             continue
         
-        # Exploramos los vecinos
+        # Explore neighbors
         for neighbor, weight in graph[current_node].items():
             distance = current_distance + weight
             
-            # Si encontramos una distancia menor, actualizamos
+            # If we found a shorter distance, update
             if distance < distances[neighbor]:
                 distances[neighbor] = distance
                 previous[neighbor] = current_node
                 heapq.heappush(queue, (distance, neighbor))
     
-    return None, float('infinity')  # No se encontró camino
+    return None, float('infinity')  # No path found
 
-def crear_grafo():
-    grafo = {}
+def create_graph():
+    graph = {}
     print("\n=== Creación del Grafo ===")
-    num_nodos = int(input("Ingrese el número de nodos: "))
+    num_nodes = int(input("Ingrese el número de nodos: "))
     
-    # Crear nodos
-    for i in range(num_nodos):
-        nodo = input(f"Ingrese el nombre del nodo {i+1}: ").upper()
-        grafo[nodo] = {}
+    # Create nodes
+    for i in range(num_nodes):
+        node = input(f"Ingrese el nombre del nodo {i+1}: ").upper()
+        graph[node] = {}
     
-    # Crear conexiones
+    # Create connections
     print("\nAhora ingrese las conexiones entre nodos:")
     while True:
         print("\nOpciones:")
         print("1. Agregar conexión")
         print("2. Finalizar")
-        opcion = input("Seleccione una opción (1-2): ")
+        option = input("Seleccione una opción (1-2): ")
         
-        if opcion == "2":
+        if option == "2":
             break
-        elif opcion == "1":
-            origen = input("Ingrese el nodo de origen: ").upper()
-            destino = input("Ingrese el nodo de destino: ").upper()
+        elif option == "1":
+            origin = input("Ingrese el nodo de origen: ").upper()
+            destination = input("Ingrese el nodo de destino: ").upper()
             
-            if origen not in grafo or destino not in grafo:
+            if origin not in graph or destination not in graph:
                 print("Error: Uno o ambos nodos no existen en el grafo")
                 continue
                 
-            peso = float(input("Ingrese el peso de la conexión: "))
+            weight = float(input("Ingrese el peso de la conexión: "))
             
-            # Agregar conexión bidireccional
-            grafo[origen][destino] = peso
-            grafo[destino][origen] = peso
-            print(f"Conexión agregada: {origen} <-> {destino} con peso {peso}")
+            # Add bidirectional connection
+            graph[origin][destination] = weight
+            graph[destination][origin] = weight
+            print(f"Conexión agregada: {origin} <-> {destination} con peso {weight}")
         else:
             print("Opción no válida")
     
-    return grafo
+    return graph
 
-def mostrar_menu():
+def show_menu():
     print("\n=== Menú Principal ===")
     print("1. Crear nuevo grafo")
     print("2. Buscar camino más corto")
     print("3. Salir")
     return input("Seleccione una opción (1-3): ")
 
-def buscar_camino(grafo):
+def find_path(graph):
     print("\n=== Buscar camino más corto ===")
-    inicio = input("Ingrese el nodo de inicio: ").upper()
-    fin = input("Ingrese el nodo de destino: ").upper()
+    start = input("Ingrese el nodo de inicio: ").upper()
+    end = input("Ingrese el nodo de destino: ").upper()
 
-    if inicio not in grafo or fin not in grafo:
+    if start not in graph or end not in graph:
         print("Error: Uno o ambos nodos no existen en el grafo")
         return
     
-    path, cost = dijkstra(grafo, inicio, fin)
+    path, cost = dijkstra(graph, start, end)
     if path:
-        print(f"\nCamino más corto de {inicio} a {fin}: {' -> '.join(path)}")
+        print(f"\nCamino más corto de {start} a {end}: {' -> '.join(path)}")
         print(f"Costo total: {cost}")
     else:
-        print(f"\nNo se encontró un camino de {inicio} a {fin}")
+        print(f"\nNo se encontró un camino de {start} a {end}")
 
 def main():
-    grafo = None
+    graph = None
     
     while True:
-        opcion = mostrar_menu()
+        option = show_menu()
         
-        if opcion == "1":
-            grafo = crear_grafo()
+        if option == "1":
+            graph = create_graph()
             print("\nGrafo creado exitosamente!")
             
-        elif opcion == "2":
-            if grafo is None:
+        elif option == "2":
+            if graph is None:
                 print("\nPrimero debe crear un grafo (opción 1)")
                 continue
-            buscar_camino(grafo)
+            find_path(graph)
             
-        elif opcion == "3":
+        elif option == "3":
             print("\n¡Gracias por usar el programa!")
             break
             
